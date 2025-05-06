@@ -72,14 +72,19 @@ jobs:
             -H "Authorization: token ${{ secrets.ACTIONS_TOKEN }}" \
             -H "Content-Type: multipart/form-data" \
             -F "attachment=@${{ gitea.workspace }}/$file" \
-            "${{ gitea.server_url }}/api/v1/repos/${{ gitea.repository }}/releases/${{ needs.get_release_id.outputs.releaseid }}"
+            "${{ gitea.server_url }}/api/v1/repos/${{ gitea.repository }}/releases/${{ needs.get_release_id.outputs.releaseid }}/assets"
           done
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          # user: ${{ vars.PYPI_USERNAME }}
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+        run: uv publish
+        env:
+          UV_PUBLISH_USERNAME: __token__
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+      # - name: Publish to PyPI
+      #   uses: pypa/gh-action-pypi-publish@release/v1
+      #   with:
+      #     # user: ${{ vars.PYPI_USERNAME }}
+      #     user: __token__
+      #     password: ${{ secrets.PYPI_API_TOKEN }}
 
   # publish_pypi:
   #   name: Publish to PyPI
