@@ -53,7 +53,7 @@ jobs:
         id: getid
         run: |
           rid=$(curl -s -X 'GET' \
-          -H 'accept: application/json'
+          -H 'accept: application/json' \
           '${{ gitea.server_url }}/api/v1/repos/${{ gitea.repository }}/releases/latest' | jq -r '.id')
           echo "releaseid=$rid" >> "$GITEA_OUTPUT"
 
