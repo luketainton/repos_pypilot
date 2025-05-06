@@ -77,7 +77,6 @@ jobs:
       - name: Publish to PyPI
         run: uv publish
         env:
-          UV_PUBLISH_USERNAME: __token__
           UV_PUBLISH_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
       # - name: Publish to PyPI
       #   uses: pypa/gh-action-pypi-publish@release/v1
