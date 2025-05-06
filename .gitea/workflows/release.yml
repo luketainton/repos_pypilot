@@ -13,31 +13,34 @@ jobs:
     name: Tag release
     uses: https://git.tainton.uk/actions/gha-workflows/.gitea/workflows/release-with-tag.yaml@main
 
-  create_release:
-    runs-on: ubuntu-latest
-    needs: tag
-    steps:
-      - uses: actions/checkout@v4.2.2
-        with:
-          fetch-depth: 0
-          ref: ${{ needs.tag.outputs.tag_name }}
-      - name: Create dummy file
-        run: echo "${{ needs.tag.outputs.changelog }}" > changelog.md
-      - name: Release
-        id: use-go-action
-        uses: https://gitea.com/actions/release-action@main
-        with:
-          files: changelog.md
-          api_key: '${{ secrets.ACTIONS_TOKEN }}'
-          title: ${{ needs.tag.outputs.tag_name }}
-          body: ${{ needs.tag.outputs.changelog }}
-
   # create_release:
-  #   name: Create Release
-  #   # needs: test
-  #   uses: https://git.tainton.uk/actions/gha-workflows/.gitea/workflows/create-release.yml@main
-  #   secrets:
-  #     ACTIONS_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
+  #   runs-on: ubuntu-latest
+  #   needs: tag
+  #   steps:
+  #     - uses: actions/checkout@v4.2.2
+  #       with:
+  #         fetch-depth: 0
+  #         ref: ${{ needs.tag.outputs.tag_name }}
+  #     - name: Create dummy file
+  #       run: echo "${{ needs.tag.outputs.changelog }}" > changelog.md
+  #     - name: Release
+  #       id: use-go-action
+  #       uses: https://gitea.com/actions/release-action@main
+  #       with:
+  #         files: changelog.md
+  #         api_key: '${{ secrets.ACTIONS_TOKEN }}'
+  #         title: ${{ needs.tag.outputs.tag_name }}
+  #         body: ${{ needs.tag.outputs.changelog }}
+
+  create_release:
+    name: Create Release
+    needs: tag
+    uses: https://git.tainton.uk/actions/gha-workflows/.gitea/workflows/create-release-preexisting-tag.yaml@main
+    with:
+      tag: ${{ needs.tag.outputs.tag_name }}
+      body: ${{ needs.tag.outputs.changelog }}
+    secrets:
+      ACTIONS_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
 
   print_release:
     name: Print Release
