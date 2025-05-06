@@ -140,7 +140,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          tags: type=semver,pattern=v{{version}},value=${{ needs.create_release.outputs.release_name }}
+          tags: type=semver,pattern=v{{version}},value=${{ needs.tag.outputs.tag_name }}
           images: |
             ghcr.io/${{ vars.GHCR_USERNAME }}/${{ steps.split.outputs.repo }}
             ${{ vars.PACKAGES_REGISTRY_URL }}/${{ gitea.repository }}
