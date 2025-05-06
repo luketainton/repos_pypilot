@@ -9,21 +9,43 @@ jobs:
   #   name: Test
   #   uses: https://git.tainton.uk/repos/pypilot/.gitea/workflows/ci.yml@main
 
+  changelog:
+    name: Generate changelog
+    uses: https://git.tainton.uk/actions/gha-workflows/.gitea/workflows/changelog.yaml@main
+
   create_release:
-    name: Create Release
-    # needs: test
-    uses: https://git.tainton.uk/actions/gha-workflows/.gitea/workflows/create-release.yml@main
-    secrets:
-      ACTIONS_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
+    runs-on: ubuntu-latest
+    needs: changelog
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+      - name: Create dummy file
+        run: touch release-dummy-file.txt
+      - name: Release
+        id: use-go-action
+        uses: https://gitea.com/actions/release-action@main
+        with:
+          files: release-dummy-file.txt
+          api_key: '${{ secrets.ACTIONS_TOKEN }}'
+          title: ${{ needs.changelog.outputs.release_name }}
+          body: ${{ needs.changelog.outputs.changelog }}
+
+  # create_release:
+  #   name: Create Release
+  #   # needs: test
+  #   uses: https://git.tainton.uk/actions/gha-workflows/.gitea/workflows/create-release.yml@main
+  #   secrets:
+  #     ACTIONS_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
 
   print_release:
     name: Print Release
     runs-on: ubuntu-latest
-    needs: create_release
+    needs: [changelog, create_release]
     outputs:
       releaseid: ${{ steps.getid.outputs.releaseid }}
     steps:
-      - run: echo "Created release ${{ needs.create_release.outputs.release_name }}."
+      - run: echo "Created release ${{ needs.changelog.outputs.release_name }}."
       - name: Get Release ID
         id: getid
         run: |
@@ -34,7 +56,7 @@ jobs:
 
   build_whl:
     name: Build Wheel File
-    needs: [create_release, print_release]
+    needs: [changelog, print_release]
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -46,7 +68,7 @@ jobs:
       - name: Setup Poetry
         uses: abatilo/actions-poetry@v4
       - name: Update pyproject.toml
-        run: ./tools/update_pyproject.sh ${{ needs.create_release.outputs.release_name }}
+        run: ./tools/update_pyproject.sh ${{ needs.changelog.outputs.release_name }}
       - name: Install dependencies
         run: poetry install
       - name: Build wheel file
