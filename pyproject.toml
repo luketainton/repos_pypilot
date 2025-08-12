@@ -32,7 +32,7 @@ dependencies = [
     "tomli==2.2.1",
     "tomlkit==0.13.3",
     "urllib3==2.5.0",
-    "wrapt==1.17.2",
+    "wrapt==1.17.3",
 ]
 
 [project.scripts]
