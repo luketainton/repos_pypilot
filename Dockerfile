@@ -1,4 +1,4 @@
-FROM python:3.13-slim
+FROM python:3.14-slim
 LABEL maintainer="Luke Tainton <luke@tainton.uk>"
 LABEL org.opencontainers.image.source="https://github.com/luketainton/pypilot"
 USER root
