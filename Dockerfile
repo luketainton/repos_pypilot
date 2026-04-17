@@ -3,12 +3,14 @@ LABEL maintainer="Luke Tainton <luke@tainton.uk>"
 LABEL org.opencontainers.image.source="https://github.com/luketainton/pypilot"
 USER root
 
-ENV PYTHONPATH="/run:/usr/local/lib/python3.13/lib-dynload:/usr/local/lib/python3.13/site-packages:/usr/local/lib/python3.13"
+RUN useradd -r -s /sbin/nologin -M user
+
+ENV PYTHONPATH="/run:/usr/local/lib/python3.14/lib-dynload:/usr/local/lib/python3.14/site-packages:/usr/local/lib/python3.14"
 WORKDIR /run
 
 RUN mkdir -p /.local && \
     chmod -R 777 /.local && \
-    pip install -U pip uv==0.5.14
+    pip install --no-cache-dir -U pip uv==0.5.14
 
 COPY pyproject.toml /run/pyproject.toml
 COPY uv.lock /run/uv.lock
@@ -23,3 +25,6 @@ ARG version="dev"
 ENV APP_VERSION=$version
 
 COPY app /run/app
+
+RUN chown -R user:user /run
+USER user
