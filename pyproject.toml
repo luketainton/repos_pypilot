@@ -9,7 +9,7 @@ authors = [
 requires-python = "<4.0,>=3.11"
 
 dependencies = [
-    "requests==2.34.1",
+    "requests==2.34.2",
     "tabulate==0.10.0",
 ]
 
