@@ -1,5 +1,3 @@
-#!/usr/local/bin/python3
-
 """MODULE: Main application module."""
 
 import sys
@@ -16,15 +14,16 @@ from app.query_normalisation import is_ip_address, resolve_domain_name
 HEADER = """-----------------------------------------------
 | IP Address Information Lookup Tool (iPilot) |
 |       By Luke Tainton (@luketainton)        |
------------------------------------------------\n"""
+-----------------------------------------------
+"""
 
 
 def main() -> None:
     """Main function.
-    
+
     Args:
         None
-    
+
     Returns:
         None
     """
@@ -33,7 +32,9 @@ def main() -> None:
         print(HEADER)
 
     # Set IP to passed IP address, or resolve passed domain name to IPv4
-    ip_address = resolve_domain_name(args.query) if not is_ip_address(args.query) else args.query
+    ip_address = (
+        resolve_domain_name(args.query) if not is_ip_address(args.query) else args.query
+    )
 
     # If not given an IPv4, and can't resolve to IPv4, then throw error and exit
     if not ip_address:

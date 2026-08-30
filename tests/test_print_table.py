@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """MODULE: Provides test cases for app/print_table.py."""
 
 from app.print_table import generate_prefix_string  # pragma: no cover

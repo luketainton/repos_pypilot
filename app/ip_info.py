@@ -1,27 +1,26 @@
-#!/usr/bin/env python3
-
 """MODULE: Provides functions to call various APIs to retrieve IP/prefix information."""
 
-from typing import Optional
-
 import ipaddress
+
 import requests
 
 
-def get_ip_information(ipv4_address: ipaddress.IPv4Address) -> Optional[dict]:
+def get_ip_information(ipv4_address: ipaddress.IPv4Address) -> dict | None:
     """Retrieves information about a given IPv4 address from IP-API.com.
-    
+
     Args:
         ipv4_address (ipaddress.IPv4Address): IPv4 address to query
-    
+
     Returns:
-        Optional[dict]: API response
+        dict | None: API response
     """
     api_endpoint: str = f"http://ip-api.com/json/{ipv4_address}"
     try:
         resp: requests.Response = requests.get(api_endpoint, timeout=10)
         resp.raise_for_status()
-        ret: dict | None = resp.json() if resp.json().get("status") == "success" else None
+        ret: dict | None = (
+            resp.json() if resp.json().get("status") == "success" else None
+        )
     except (requests.exceptions.JSONDecodeError, requests.exceptions.HTTPError):
         ret = None
     return ret
@@ -29,10 +28,10 @@ def get_ip_information(ipv4_address: ipaddress.IPv4Address) -> Optional[dict]:
 
 def get_autonomous_system_number(as_info: str) -> str:
     """Parses AS number from provided AS information.
-    
+
     Args:
         as_info (str): AS information
-    
+
     Returns:
         str: AS number
     """
@@ -40,16 +39,18 @@ def get_autonomous_system_number(as_info: str) -> str:
     return as_number
 
 
-def get_prefix_information(autonomous_system: str) -> Optional[list]:
+def get_prefix_information(autonomous_system: str) -> list | None:
     """Retrieves prefix information about a given autonomous system.
-    
+
     Args:
         autonomous_system (str): autonomous system to query, e.g. AS123
-    
+
     Returns:
-        Optional[list]: API response
+        list | None: API response
     """
-    api_endpoint: str = f"https://api.hackertarget.com/aslookup/?q={str(autonomous_system)}"
+    api_endpoint: str = (
+        f"https://api.hackertarget.com/aslookup/?q={autonomous_system!s}"
+    )
     try:
         resp: requests.Response = requests.get(api_endpoint, timeout=10)
         resp.raise_for_status()

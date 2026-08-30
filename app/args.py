@@ -1,5 +1,3 @@
-#!/usr/local/env python3
-
 """MODULE: Provides CLI arguments to the application."""
 
 import argparse
@@ -9,10 +7,10 @@ from app.query_normalisation import get_public_ip
 
 def parse_args() -> argparse.Namespace:  # pragma: no cover
     """Get arguments from user via the command line.
-    
+
     Args:
         None
-    
+
     Returns:
         argparse.Namespace: parsed arguments
     """

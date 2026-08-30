@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """MODULE: Provides functions for preparing, then printing, retrieved data."""
 
 from tabulate import tabulate

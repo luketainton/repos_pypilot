@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """MODULE: Provides functions that ensure an IP address is
 available to query the APIs for."""
 

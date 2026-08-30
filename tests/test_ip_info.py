@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """MODULE: Provides test cases for app/ip_info.py."""
 
 import requests_mock
@@ -55,7 +53,7 @@ def test_get_prefix_information_broken_api_response() -> None:
     autonomous_system = "AS109"
     with requests_mock.Mocker() as mocker:
         mocker.get(
-            f"https://api.hackertarget.com/aslookup/?q={str(autonomous_system)}",
+            f"https://api.hackertarget.com/aslookup/?q={autonomous_system!s}",
             text="error",
         )
         resp = get_prefix_information(autonomous_system)
@@ -67,7 +65,7 @@ def test_get_prefix_information_bad_response() -> None:
     autonomous_system = "AS109"
     with requests_mock.Mocker() as mocker:
         mocker.get(
-            f"https://api.hackertarget.com/aslookup/?q={str(autonomous_system)}",
+            f"https://api.hackertarget.com/aslookup/?q={autonomous_system!s}",
             status_code=404,
         )
         resp = get_prefix_information(autonomous_system)
